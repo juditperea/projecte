@@ -3,19 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('/dashboard', function () {
@@ -28,4 +18,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/*
+
+//ejemplo de ruta protegida por el middleware
+Route::get('/admin/dashboard', function () {
+    return view('dashboard.admin');
+})->middleware('checkrole:admin');
+
+//rol
+Route::get('/admin/dashboard', function () {
+})->middleware(['auth', 'role:admin']);
+
+//permiso
+
+Route::get('/admin/dashboard', function () {
+    // Contenido del dashboard administrativo
+})->middleware('permission:view dashboard');
+
+*/
 require __DIR__.'/auth.php';

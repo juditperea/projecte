@@ -7,39 +7,38 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\HasRoles;
+use Spatie\Permission\Traits\HasRoles as TraitsHasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,TraitsHasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
     protected $fillable = [
-        'name',
-        'email',
+        'username', 
+        'email', 
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function lists()
+    {
+        return $this->hasMany(UserList::class, 'user_id');
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function movieComments()
+    {
+        return $this->hasMany(MovieComment::class, 'user_id');
+    }
+
+    public function seriesComments()
+    {
+        return $this->hasMany(SerieComment::class, 'user_id');
+    }
 }
+
+
